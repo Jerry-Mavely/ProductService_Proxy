@@ -50,7 +50,7 @@ public class ProductController {
         catch (Exception e){
             ResponseEntity<Product> responseEntity = new ResponseEntity<>
                                                 (HttpStatus.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500 error code
+            return responseEntity; // 500 error code
         }
     }
 
