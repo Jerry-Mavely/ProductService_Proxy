@@ -1,7 +1,6 @@
 package com.example.productservice_proxy.Clients.FakeStore.Dto;
 
 import com.example.productservice_proxy.Clients.IClientProductDto;
-import com.example.productservice_proxy.dtos.ProductDto;
 import com.example.productservice_proxy.dtos.RatingDto;
 import com.example.productservice_proxy.models.Product;
 import lombok.Getter;
