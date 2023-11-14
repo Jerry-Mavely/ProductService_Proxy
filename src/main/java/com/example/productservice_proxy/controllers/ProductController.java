@@ -1,12 +1,9 @@
 package com.example.productservice_proxy.controllers;
 
-import com.example.productservice_proxy.Clients.FakeStore.Dto.FakeStoreProductDto;
-import com.example.productservice_proxy.Clients.IClientProductDto;
 import com.example.productservice_proxy.dtos.ProductDto;
 import com.example.productservice_proxy.models.Categories;
 import com.example.productservice_proxy.models.Product;
 import com.example.productservice_proxy.services.IProductService;
-import com.example.productservice_proxy.services.FakeStoreProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -32,26 +29,29 @@ public class ProductController {
     }
 
     @GetMapping("/{ID}")
-    public ResponseEntity<Product> getSingleProduct(@PathVariable("ID") Long productId){
+    public ResponseEntity<Product> getSingleProduct(@PathVariable("ID") Long productId) /*throws Exception */{
         try {
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
             headers.add("Accept", "application/json");
             headers.add("Content-Type", "application/json");
             headers.add("auth-token", "heyAccess");
             if(productId < 1) {
-                throw new IllegalArgumentException("Something went wrong");
+                throw new IllegalArgumentException("id less than 1");
             }
             Product product = productService.getSingleProduct(productId);
             ResponseEntity<Product> responseEntity = new ResponseEntity<>
                                                 (product, headers, HttpStatus.OK);
             return responseEntity;
-//        System.out.println(s);
         }
-        catch (Exception e){
-            ResponseEntity<Product> responseEntity = new ResponseEntity<>
-                                                (HttpStatus.INTERNAL_SERVER_ERROR);
-            return responseEntity; // 500 error code
+        catch (Exception e) {
+            throw e;
         }
+//        catch (Exception e){
+//            ResponseEntity<Product> responseEntity = new ResponseEntity<>
+//                                                (HttpStatus.INTERNAL_SERVER_ERROR);
+////            System.out.println(e.getMessage());
+//            return responseEntity; // 500 error code
+//        }
     }
 
     @PostMapping("")
