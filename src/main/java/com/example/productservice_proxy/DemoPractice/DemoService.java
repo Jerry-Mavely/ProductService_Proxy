@@ -1,12 +1,11 @@
 package com.example.productservice_proxy.DemoPractice;
 
 
-import com.example.productservice_proxy.dtos.ProductDto;
+import com.example.productservice_proxy.dtos.productDtos.ProductDto;
 import com.example.productservice_proxy.models.Categories;
 import com.example.productservice_proxy.models.Product;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -69,7 +68,7 @@ public class DemoService {
         product.setTitle(productDto.getTitle());
         product.setPrice(productDto.getPrice());
         product.setDescription(productDto.getDescription());
-        product.setImageURL(productDto.getImageURL());
+        product.setImageURL(productDto.getImage());
         Categories category = new Categories();
         category.setName(productDto.getCategory());
         product.setCategory(category);

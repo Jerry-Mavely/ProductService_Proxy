@@ -1,15 +1,19 @@
 package com.example.productservice_proxy.controllers;
 
-import com.example.productservice_proxy.dtos.ProductDto;
+import com.example.productservice_proxy.dtos.productDtos.ProductDto;
+import com.example.productservice_proxy.dtos.productDtos.ProductResponseDto;
+import com.example.productservice_proxy.dtos.productDtos.ProductsAndSizeDto;
 import com.example.productservice_proxy.models.Categories;
 import com.example.productservice_proxy.models.Product;
-import com.example.productservice_proxy.services.IProductService;
+import com.example.productservice_proxy.services.productServices.IProductService;
+import com.example.productservice_proxy.services.productServices.SelfProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*This Controller will always answer "/products" */
@@ -24,8 +28,24 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Product>> getAllProducts(){
-        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
+    public ResponseEntity<List<ProductResponseDto>> getAllProducts(){
+        List<Product> products = productService.getAllProducts();
+        List<ProductResponseDto> response=new ArrayList<>();
+        Long i=1L;
+        for(Product product: products){
+            response.add(new ProductResponseDto(product,i));
+            i++;
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/withSize")
+    public ResponseEntity<ProductsAndSizeDto> getAllProductsWithSize(){
+        ResponseEntity<List<ProductResponseDto>> productList = getAllProducts();
+        ProductsAndSizeDto productsAndSizeDto = new ProductsAndSizeDto();
+        productsAndSizeDto.setSize(productList.getBody().size());
+        productsAndSizeDto.setProducts(productList.getBody());
+        return new ResponseEntity<>(productsAndSizeDto, HttpStatus.OK);
     }
 
     @GetMapping("/{ID}")
@@ -59,6 +79,23 @@ public class ProductController {
         Product response = productService.addNewProduct(
                                                 getProduct(productDto));
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/multiple")
+    public ResponseEntity<String> addMultipleNewProducts(@RequestBody List<ProductDto> listProducts){
+        List<Product> products = new ArrayList<>();
+        for(ProductDto productDto: listProducts){
+            products.add(getProduct(productDto));
+        }
+
+        try {
+            ((SelfProductService)productService).addMultipleNewProduct(products);
+            return new ResponseEntity<>("Products added successfully", HttpStatus.OK);
+        }
+        catch (Exception e){
+            throw e;
+        }
+
     }
 
     @PutMapping("/{ID}")
@@ -96,13 +133,15 @@ public class ProductController {
 
     private Product getProduct(ProductDto productDto) {
         Product product = new Product();
-        product.setId(productDto.getId());
+//        product.setId(productDto.getId());
         product.setTitle(productDto.getTitle());
         product.setPrice(productDto.getPrice());
-        product.setDescription(productDto.getDescription());
-        product.setImageURL(productDto.getImageURL());
+        int l = productDto.getDescription().length();
+        product.setDescription(productDto.getDescription().substring(0,Math.min(500,l)));
+        product.setImageURL(productDto.getImage());
         Categories category = new Categories();
         category.setName(productDto.getCategory());
+//        category.setId(productDto.getCategoryId());
         product.setCategory(category);
         return product;
     }

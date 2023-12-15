@@ -1,7 +1,7 @@
 package com.example.productservice_proxy.DemoPractice;
 
 
-import com.example.productservice_proxy.dtos.ProductDto;
+import com.example.productservice_proxy.dtos.productDtos.ProductDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

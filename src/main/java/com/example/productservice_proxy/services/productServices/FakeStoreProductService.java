@@ -1,15 +1,14 @@
-package com.example.productservice_proxy.services;
+package com.example.productservice_proxy.services.productServices;
 
 import com.example.productservice_proxy.Clients.FakeStore.Client.FakeStoreClient;
 import com.example.productservice_proxy.Clients.FakeStore.Dto.FakeStoreProductDto;
 import com.example.productservice_proxy.models.Categories;
 import com.example.productservice_proxy.models.Product;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+//@Service
 public class FakeStoreProductService implements IProductService {
 
 //    private RestTemplateBuilder restTemplateBuilder;
@@ -104,6 +103,8 @@ public class FakeStoreProductService implements IProductService {
         Product deletedProduct = getProduct(fakeStoreClient.deleteProduct(productId));
         return new Product();
     }
+
+
 
     /**
      * This method converts FakeStoreProductDto to Product

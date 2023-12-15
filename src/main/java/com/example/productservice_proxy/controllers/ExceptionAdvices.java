@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionAdvices {
     @ExceptionHandler
     public ResponseEntity<String> handleException(Exception e) {
+        e.printStackTrace();
         return new ResponseEntity<>("Exception Advice: Something is wrong", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
