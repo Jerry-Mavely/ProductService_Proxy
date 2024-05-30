@@ -1,5 +1,7 @@
 package com.example.productservice_proxy.controllers;
 
+import com.example.productservice_proxy.Clients.FakeStore.Client.FakeStoreClient;
+import com.example.productservice_proxy.Clients.FakeStore.Dto.FakeStoreProductDto;
 import com.example.productservice_proxy.dtos.productDtos.ProductDto;
 import com.example.productservice_proxy.dtos.productDtos.ProductResponseDto;
 import com.example.productservice_proxy.dtos.productDtos.ProductsAndSizeDto;
@@ -23,8 +25,16 @@ public class ProductController {
 
     IProductService productService;
 
-    public ProductController(IProductService productService) {
+    /** FakeStoreClient is a RestTemplate client that fetches data from a fake store API
+     * Required to populate the table with data
+     */
+//    FakeStoreClient fakeStoreClient;
+
+    /* Next line to be used when populating tables from FakeStore Api*/
+//    public ProductController(IProductService productService, FakeStoreClient fakeStoreClient) {
+    public ProductController(IProductService productService, FakeStoreClient fakeStoreClient) {
         this.productService = productService;
+//        this.fakeStoreClient = fakeStoreClient;
     }
 
     @GetMapping("")
@@ -49,7 +59,7 @@ public class ProductController {
     }
 
     @GetMapping("/{ID}")
-    public ResponseEntity<Product> getSingleProduct(@PathVariable("ID") Long productId) /*throws Exception */{
+    public ResponseEntity<ProductResponseDto> getSingleProduct(@PathVariable("ID") Long productId) /*throws Exception */{
         try {
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
             headers.add("Accept", "application/json");
@@ -58,8 +68,8 @@ public class ProductController {
             if(productId < 1) {
                 throw new IllegalArgumentException("id less than 1");
             }
-            Product product = productService.getSingleProduct(productId);
-            ResponseEntity<Product> responseEntity = new ResponseEntity<>
+            ProductResponseDto product = new ProductResponseDto( productService.getSingleProduct(productId));
+            ResponseEntity<ProductResponseDto> responseEntity = new ResponseEntity<>
                                                 (product, headers, HttpStatus.OK);
             return responseEntity;
         }
@@ -97,6 +107,29 @@ public class ProductController {
         }
 
     }
+
+    /**
+     * Function/Post Mapping to populate the tables with data from Fakestore API
+     */
+//    @PostMapping("/FS_Populate")
+    /*
+    public ResponseEntity<String> PopulateProducts(){
+        List<Product> products = new ArrayList<>();
+        for (FakeStoreProductDto productDto : fakeStoreClient.getAllProducts()) {
+            Product product = getProduct(productDto);
+            products.add(product);
+        }
+        try {
+            ((SelfProductService)productService).addMultipleNewProduct(products);
+            return new ResponseEntity<>("Products added successfully", HttpStatus.OK);
+        }
+        catch (Exception e){
+            throw e;
+        }
+
+    }
+    */
+
 
     @PutMapping("/{ID}")
     public String updateProduct(@PathVariable("ID") Long Id,
@@ -142,6 +175,20 @@ public class ProductController {
         Categories category = new Categories();
         category.setName(productDto.getCategory());
 //        category.setId(productDto.getCategoryId());
+        product.setCategory(category);
+        return product;
+    }
+
+    private Product getProduct(FakeStoreProductDto productDto) {
+        Product product = new Product();
+//        product.setId(productDto.getId());
+        product.setTitle(productDto.getTitle());
+        product.setPrice(productDto.getPrice());
+        int l = productDto.getDescription().length();
+        product.setDescription(productDto.getDescription().substring(0,Math.min(499,l)));
+        product.setImageURL(productDto.getImage());
+        Categories category = new Categories();
+        category.setName(productDto.getCategory());
         product.setCategory(category);
         return product;
     }

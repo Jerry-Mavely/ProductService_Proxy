@@ -1,6 +1,7 @@
 package com.example.productservice_proxy.controllers;
 
 import com.example.productservice_proxy.dtos.productDtos.ProductDto;
+import com.example.productservice_proxy.dtos.productDtos.ProductResponseDto;
 import com.example.productservice_proxy.models.Product;
 import com.example.productservice_proxy.services.productServices.IProductService;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class ProductControllerTest {
         product.setTitle("test");
         when(productService.getSingleProduct(any(Long.class))).thenReturn(product);
 
-        ResponseEntity<Product> response = productController.getSingleProduct(2l);
+        ResponseEntity<ProductResponseDto> response = productController.getSingleProduct(2l);
 
         assertNotNull(response);
         assertEquals("test", response.getBody().getTitle());

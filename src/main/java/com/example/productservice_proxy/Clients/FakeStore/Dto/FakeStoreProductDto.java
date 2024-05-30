@@ -16,7 +16,7 @@ public class FakeStoreProductDto implements IClientProductDto {
     private double price;
     private String description;
     private String category;
-    private String imageURL;
+    private String image;
     private RatingDto rating;
 
     public FakeStoreProductDto(){
@@ -27,7 +27,7 @@ public class FakeStoreProductDto implements IClientProductDto {
         this.title = product.getTitle();
         this.price = product.getPrice();
         this.description = product.getDescription();
-        this.imageURL = product.getImageURL();
+        this.image = product.getImageURL();
         this.category = product.getCategory().getName();
     }
 }

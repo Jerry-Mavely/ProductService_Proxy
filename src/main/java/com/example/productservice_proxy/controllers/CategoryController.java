@@ -8,10 +8,7 @@ import com.example.productservice_proxy.models.Product;
 import com.example.productservice_proxy.services.categoryServices.ICategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,4 +45,12 @@ public class CategoryController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/name")
+    public ResponseEntity<SingleCategoryResponseDto> getCategoryByName(@RequestParam(value = "categoryName") String categoryName){
+        Categories category = categoryService.findCategoriesByName(categoryName);
+        SingleCategoryResponseDto response = new SingleCategoryResponseDto(category);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

@@ -29,4 +29,13 @@ public class ProductResponseDto {
         this.imageURL = product.getImageURL();
         this.category = product.getCategory().getName();
     }
+    public ProductResponseDto(Product product){
+//        this.itemNumber = itemNumber;
+
+        this.title = product.getTitle();
+        this.price = product.getPrice();
+        this.description = product.getDescription();
+        this.imageURL = product.getImageURL();
+        this.category = product.getCategory().getName();
+    }
 }
