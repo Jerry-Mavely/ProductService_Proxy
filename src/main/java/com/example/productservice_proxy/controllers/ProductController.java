@@ -32,7 +32,7 @@ public class ProductController {
 
     /* Next line to be used when populating tables from FakeStore Api*/
 //    public ProductController(IProductService productService, FakeStoreClient fakeStoreClient) {
-    public ProductController(IProductService productService, FakeStoreClient fakeStoreClient) {
+    public ProductController(IProductService productService) {
         this.productService = productService;
 //        this.fakeStoreClient = fakeStoreClient;
     }
